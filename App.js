@@ -1,117 +1,125 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
-import type {Node} from 'react';
+import React, { useState } from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
+SafeAreaView,
+ScrollView,
+StatusBar,
+StyleSheet,
+Text,
+useColorScheme,
+View,
+TextInput,
+TouchableOpacity,
 } from 'react-native';
-
 import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
+Colors,
+DebugInstructions,
+Header,
+LearnMoreLinks,
+ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import Login from './src/screen/Login';
+import Home from './src/screen/Home';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-/* $FlowFixMe[missing-local-annot] The type annotation(s) required by Flow's
- * LTI update could not be added via codemod */
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
+const Stack = createNativeStackNavigator();
+
+const App =  () => {
+const onPressLogin = () => {
+// Do something about login operation
 };
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
+const onPressForgotPassword = () => {
+// Do something about forgot password operation
 };
+const onPressSignUp = () => {
+// Do something about signup operation
+};
+const [state,setState] = useState({
+email: '',
+password: '',
+})
+return (
+    <NavigationContainer>
+         <Stack.Navigator initialRouteName='Login'>
 
+            <Stack.Screen name="Login" options={{headerShown:false}} component={Login} />
+            <Stack.Screen name="Home" component={Home} />
+
+        </Stack.Navigator>
+
+    </NavigationContainer>
+//  <View style={styles.container}>
+// <Text style={styles.title}> Login Screen</Text>
+// <View style={styles.inputView}>
+// <TextInput
+// style={styles.inputText}
+// placeholder="Email"
+// placeholderTextColor="#003f5c"
+// onChangeText={text => setState({email:text})}/>
+// </View>
+// <View style={styles.inputView}>
+// <TextInput
+// style={styles.inputText}
+// secureTextEntry
+// placeholder="Password"
+// placeholderTextColor="#003f5c"
+// onChangeText={text => setState({password:text})}/>
+// </View>
+// <TouchableOpacity
+// onPress = {onPressForgotPassword}>
+// <Text style={styles.forgotAndSignUpText}>Forgot Password?</Text>
+// </TouchableOpacity>
+// <TouchableOpacity
+// onPress = {onPressLogin}
+// style={styles.loginBtn}>
+// <Text style={styles.loginText}>LOGIN </Text>
+// </TouchableOpacity>
+// <TouchableOpacity
+// onPress = {onPressSignUp}>
+// <Text style={styles.forgotAndSignUpText}>Signup</Text>
+// </TouchableOpacity>
+// </View> 
+);
+}
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
+container: {
+flex: 1,
+// backgroundColor: '#4FD3DA',
+alignItems: 'center',
+justifyContent: 'center',
+},
+title:{
+fontWeight: "bold",
+fontSize:50,
+color:"#fb5b5a",
+marginBottom: 40,
+},
+inputView:{
+width:"80%",
+backgroundColor:"#3AB4BA",
+borderRadius:25,
+height:50,
+marginBottom:20,
+justifyContent:"center",
+padding:20
+},
+inputText:{
+height:50,
+color:"white"
+},
+forgotAndSignUpText:{
+color:"white",
+fontSize:11
+},
+loginBtn:{
+width:"80%",
+backgroundColor:"#fb5b5a",
+borderRadius:25,
+height:50,
+alignItems:"center",
+justifyContent:"center",
+marginTop:40,
+marginBottom:10
+},
 });
-
 export default App;
