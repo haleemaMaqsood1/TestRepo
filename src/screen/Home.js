@@ -1,82 +1,155 @@
-import React, { useState } from 'react';
-import {
-SafeAreaView,
-ScrollView,
-StatusBar,
-StyleSheet,
-Text,
-useColorScheme,
-View,
-TextInput,
-TouchableOpacity,
-} from 'react-native';
-import {
-Colors,
-DebugInstructions,
-Header,
-LearnMoreLinks,
-ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-const Home =  () => {
-const onPressLogin = () => {
-// Do something about login operation
-};
-const onPressForgotPassword = () => {
-// Do something about forgot password operation
-};
-const onPressSignUp = () => {
-// Do something about signup operation
-};
-const [state,setState] = useState({
-email: '',
-password: '',
-})
-return (
-<View style={styles.container}>
-<Text style={styles.title}> Login Screen</Text>
+import React, { useState } from "react"; 
+import { 
+	View, 
+	Text, 
+	TextInput, 
+	TouchableOpacity, 
+	FlatList, 
+	StyleSheet, 
+} from "react-native"; 
 
-</View>
-);
-}
-const styles = StyleSheet.create({
-container: {
-flex: 1,
-// backgroundColor: '#4FD3DA',
-alignItems: 'center',
-justifyContent: 'center',
-},
-title:{
-fontWeight: "bold",
-fontSize:50,
-color:"#fb5b5a",
-marginBottom: 40,
-},
-inputView:{
-width:"80%",
-backgroundColor:"#3AB4BA",
-borderRadius:25,
-height:50,
-marginBottom:20,
-justifyContent:"center",
-padding:20
-},
-inputText:{
-height:50,
-color:"white"
-},
-forgotAndSignUpText:{
-color:"white",
-fontSize:11
-},
-loginBtn:{
-width:"80%",
-backgroundColor:"#fb5b5a",
-borderRadius:25,
-height:50,
-alignItems:"center",
-justifyContent:"center",
-marginTop:40,
-marginBottom:10
-},
-});
+const Home = () => { 
+	const [task, setTask] = useState(""); 
+	const [tasks, setTasks] = useState([]); 
+	const [editIndex, setEditIndex] = useState(-1); 
+
+	const handleAddTask = () => { 
+		if (task) { 
+			if (editIndex !== -1) { 
+				// Edit existing task 
+				const updatedTasks = [...tasks]; 
+				updatedTasks[editIndex] = task; 
+				setTasks(updatedTasks); 
+				setEditIndex(-1); 
+			} else { 
+				// Add new task 
+				setTasks([...tasks, task]); 
+			} 
+			setTask(""); 
+		} 
+	}; 
+
+	const handleEditTask = (index) => { 
+		const taskToEdit = tasks[index]; 
+		setTask(taskToEdit); 
+		setEditIndex(index); 
+	}; 
+
+	const handleDeleteTask = (index) => { 
+		const updatedTasks = [...tasks]; 
+		updatedTasks.splice(index, 1); 
+		setTasks(updatedTasks); 
+	}; 
+
+	const renderItem = ({ item, index }) => ( 
+		<View style={styles.task}> 
+			<Text 
+				style={styles.itemList}>{item.substring(0,15)}</Text> 
+			<View 
+				style={styles.taskButtons}> 
+				<TouchableOpacity 
+					onPress={() => handleEditTask(index)}> 
+					<Text 
+						style={styles.editButton}>Edit</Text> 
+				</TouchableOpacity> 
+				<TouchableOpacity 
+					onPress={() => handleDeleteTask(index)}> 
+					<Text 
+						style={styles.deleteButton}>Delete</Text> 
+				</TouchableOpacity> 
+			</View> 
+		</View> 
+	); 
+
+	return ( 
+		<View style={styles.container}> 
+			<Text style={styles.heading}>Enter your Note</Text> 
+			{/* <Text style={styles.title}>ToDo App</Text>  */}
+			<TextInput 
+				style={styles.input} 
+				placeholder="Write a Note"
+				value={task} 
+				onChangeText={(text) => setTask(text)} 
+			/> 
+			<TouchableOpacity 
+				style={styles.addButton} 
+				onPress={handleAddTask}> 
+				<Text style={styles.addButtonText}> 
+					{editIndex !== -1 ? "Update Note" : "Add Note"} 
+				</Text> 
+			</TouchableOpacity> 
+			<FlatList 
+				data={tasks} 
+				renderItem={renderItem} 
+				keyExtractor={(item, index) => index.toString()} 
+			/> 
+		</View> 
+	); 
+}; 
+
+const styles = StyleSheet.create({ 
+	container: { 
+		flex: 1, 
+		padding: 40, 
+		marginTop: 40, 
+	}, 
+	title: { 
+		fontSize: 24, 
+		fontWeight: "bold", 
+		marginBottom: 20, 
+	}, 
+	heading: { 
+		fontSize: 30, 
+		fontWeight: "bold", 
+		marginBottom: 7, 
+		color: "green", 
+	}, 
+	input: { 
+		borderWidth: 3, 
+		borderColor: "#ccc", 
+		padding: 10, 
+		marginBottom: 10, 
+		borderRadius: 10, 
+		fontSize: 18, 
+        width:'100%',
+        height:'40%',
+	}, 
+	addButton: { 
+		backgroundColor: "green", 
+		padding: 10, 
+		borderRadius: 5, 
+		marginBottom: 10, 
+	}, 
+	addButtonText: { 
+		color: "white", 
+		fontWeight: "bold", 
+		textAlign: "center", 
+		fontSize: 18, 
+	}, 
+	task: { 
+		flexDirection: "row", 
+		justifyContent: "space-between", 
+		alignItems: "center", 
+		marginBottom: 15, 
+		fontSize: 18, 
+	}, 
+	itemList: { 
+		fontSize: 19, 
+	}, 
+	taskButtons: { 
+		flexDirection: "row", 
+	}, 
+	editButton: { 
+		marginRight: 10, 
+		color: "green", 
+		fontWeight: "bold", 
+		fontSize: 18, 
+	}, 
+	deleteButton: { 
+		color: "red", 
+		fontWeight: "bold", 
+		fontSize: 18, 
+	}, 
+}); 
+
 export default Home;
