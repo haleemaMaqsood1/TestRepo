@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import {
 SafeAreaView,
@@ -10,6 +10,7 @@ useColorScheme,
 View,
 TextInput,
 TouchableOpacity,
+Alert
 } from 'react-native';
 import {
 Colors,
@@ -27,9 +28,13 @@ const onPressLogin = async() => {
     console.log("login click",email)
     if(email && password){
         try {
-            await createUserWithEmailAndPassword(auth,email,password);
+            // await createUserWithEmailAndPassword(auth,email,password);
+            await signInWithEmailAndPassword(auth,email,password);
+            alert(JSON.stringify("Login app successfully"))
         } catch (error) {
             console.log("got error,",error.message);
+            alert(JSON.stringify(error.message))
+
         }
     }
 // Do something about login operation
@@ -37,8 +42,20 @@ const onPressLogin = async() => {
 const onPressForgotPassword = () => {
 // Do something about forgot password operation
 };
-const onPressSignUp = () => {
-// Do something about signup operation
+const onPressSignUp =async () => {
+    console.log("signup click",email);
+    if(email && password){
+        try {
+            await createUserWithEmailAndPassword(auth,email,password);
+            alert(JSON.stringify(" Account created successfully"))
+
+
+        } catch (error) {
+            console.log("got error,",error.message);
+            alert(JSON.stringify(error.message))
+
+        }
+    }
 };
 return (
 <View style={styles.container}>
@@ -70,9 +87,14 @@ style={styles.loginBtn}>
 <Text style={styles.loginText}>LOGIN </Text>
 </TouchableOpacity>
 <TouchableOpacity
+onPress = {onPressSignUp}
+style={styles.signUpBtn}>
+<Text style={styles.loginText}>SignUp </Text>
+</TouchableOpacity>
+{/* <TouchableOpacity
 onPress = {onPressSignUp}>
 <Text style={styles.forgotAndSignUpText}>Signup</Text>
-</TouchableOpacity>
+</TouchableOpacity> */}
 </View>
 );
 }
@@ -107,14 +129,27 @@ color:"white",
 fontSize:11
 },
 loginBtn:{
-width:"80%",
+width:"40%",
 backgroundColor:"#fb5b5a",
 borderRadius:25,
 height:50,
 alignItems:"center",
 justifyContent:"center",
 marginTop:40,
-marginBottom:10
+marginBottom:10,
 },
+signUpBtn:{
+    width:"40%",
+    backgroundColor:"green",
+    borderRadius:25,
+    height:50,
+    alignItems:"center",
+    justifyContent:"center",
+    marginTop:10,
+    marginBottom:10
+    },
+    loginText:{
+        color:'white'
+    }
 });
 export default Login;

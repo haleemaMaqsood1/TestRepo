@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useState,useEffect } from "react"; 
 import { 
 	View, 
 	Text, 
@@ -7,39 +7,88 @@ import {
 	FlatList, 
 	StyleSheet, 
 } from "react-native"; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => { 
 	const [task, setTask] = useState(""); 
 	const [tasks, setTasks] = useState([]); 
 	const [editIndex, setEditIndex] = useState(-1); 
+    useEffect(() => {
+        loadTasks();
+    }, []);
+    const handleAddTask = () => {
+        if (task) {
+            if (editIndex !== -1) {
+                const updatedTasks = [...tasks];
+                updatedTasks[editIndex] = task;
+                setTasks(updatedTasks);
+                saveTasks(updatedTasks);
+                setEditIndex(-1);
+            } else {
+                const updatedTasks = [...tasks, task];
+                setTasks(updatedTasks);
+                saveTasks(updatedTasks);
+            }
+            setTask("");
+        }
+    };
 
-	const handleAddTask = () => { 
-		if (task) { 
-			if (editIndex !== -1) { 
-				// Edit existing task 
-				const updatedTasks = [...tasks]; 
-				updatedTasks[editIndex] = task; 
-				setTasks(updatedTasks); 
-				setEditIndex(-1); 
-			} else { 
-				// Add new task 
-				setTasks([...tasks, task]); 
-			} 
-			setTask(""); 
-		} 
-	}; 
+	// const handleAddTask = () => { 
+	// 	if (task) { 
+	// 		if (editIndex !== -1) { 
+	// 			// Edit existing task 
+	// 			const updatedTasks = [...tasks]; 
+	// 			updatedTasks[editIndex] = task; 
+	// 			setTasks(updatedTasks); 
+	// 			setEditIndex(-1); 
+	// 		} else { 
+	// 			// Add new task 
+	// 			setTasks([...tasks, task]); 
+	// 		} 
+	// 		setTask(""); 
+	// 	} 
+	// }; 
+    const loadTasks = async () => {
+        try {
+            const savedTasks = await AsyncStorage.getItem('tasks');
+            if (savedTasks) {
+                setTasks(JSON.parse(savedTasks));
+            }
+        } catch (error) {
+            console.error('Error loading tasks:', error);
+        }
+    };
+
+    const saveTasks = async (updatedTasks) => {
+        try {
+            await AsyncStorage.setItem('tasks', JSON.stringify(updatedTasks));
+            console.log("task save at local storage",updatedTasks)
+        } catch (error) {
+            console.error('Error saving tasks:', error);
+        }
+    };
 
 	const handleEditTask = (index) => { 
 		const taskToEdit = tasks[index]; 
 		setTask(taskToEdit); 
 		setEditIndex(index); 
 	}; 
-
-	const handleDeleteTask = (index) => { 
-		const updatedTasks = [...tasks]; 
-		updatedTasks.splice(index, 1); 
-		setTasks(updatedTasks); 
-	}; 
+    const handleDeleteTask = async (index) => {
+        const updatedTasks = [...tasks];
+        updatedTasks.splice(index, 1);
+        setTasks(updatedTasks);
+        try {
+            await AsyncStorage.setItem('tasks', JSON.stringify(updatedTasks));
+            console.log("handle delete with async storage ",updatedTasks)
+        } catch (error) {
+            console.error('Error saving tasks:', error);
+        }
+    };
+	// const handleDeleteTask = (index) => { 
+	// 	const updatedTasks = [...tasks]; 
+	// 	updatedTasks.splice(index, 1); 
+	// 	setTasks(updatedTasks); 
+	// }; 
 
 	const renderItem = ({ item, index }) => ( 
 		<View style={styles.task}> 
