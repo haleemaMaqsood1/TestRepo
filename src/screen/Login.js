@@ -1,3 +1,4 @@
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import React, { useState } from 'react';
 import {
 SafeAreaView,
@@ -17,8 +18,20 @@ Header,
 LearnMoreLinks,
 ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import { auth } from '../../FirebaseConfig';
 const Login =  () => {
-const onPressLogin = () => {
+    const [email,setEmail]= useState('');
+    const [password,setPassword]= useState('');
+
+const onPressLogin = async() => {
+    console.log("login click",email)
+    if(email && password){
+        try {
+            await createUserWithEmailAndPassword(auth,email,password);
+        } catch (error) {
+            console.log("got error,",error.message);
+        }
+    }
 // Do something about login operation
 };
 const onPressForgotPassword = () => {
@@ -27,10 +40,6 @@ const onPressForgotPassword = () => {
 const onPressSignUp = () => {
 // Do something about signup operation
 };
-const [state,setState] = useState({
-email: '',
-password: '',
-})
 return (
 <View style={styles.container}>
 <Text style={styles.title}> Login Screen</Text>
@@ -38,16 +47,18 @@ return (
 <TextInput
 style={styles.inputText}
 placeholder="Email"
+value={email}
 placeholderTextColor="#003f5c"
-onChangeText={text => setState({email:text})}/>
+onChangeText={value => setEmail(value)}/>
 </View>
 <View style={styles.inputView}>
 <TextInput
 style={styles.inputText}
 secureTextEntry
 placeholder="Password"
+value={password}
 placeholderTextColor="#003f5c"
-onChangeText={text => setState({password:text})}/>
+onChangeText={value => setPassword(value)}/>
 </View>
 <TouchableOpacity
 onPress = {onPressForgotPassword}>

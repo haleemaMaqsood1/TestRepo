@@ -21,29 +21,31 @@ import Login from './src/screen/Login';
 import Home from './src/screen/Home';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import useAuth from './hooks/useAuth';
 const Stack = createNativeStackNavigator();
 
 const App =  () => {
-const onPressLogin = () => {
-// Do something about login operation
-};
-const onPressForgotPassword = () => {
-// Do something about forgot password operation
-};
-const onPressSignUp = () => {
-// Do something about signup operation
-};
-const [state,setState] = useState({
-email: '',
-password: '',
-})
+    const user= useAuth();
+
+
+
+if(user){
+    return (
+        <NavigationContainer>
+             <Stack.Navigator initialRouteName='Home'>
+                <Stack.Screen name="Home" component={Home} />
+    
+            </Stack.Navigator>
+    
+        </NavigationContainer>
+    );
+}else{
 return (
     <NavigationContainer>
          <Stack.Navigator initialRouteName='Login'>
 
             <Stack.Screen name="Login" options={{headerShown:false}} component={Login} />
-            <Stack.Screen name="Home" component={Home} />
+            {/* <Stack.Screen name="Home" component={Home} /> */}
 
         </Stack.Navigator>
 
@@ -80,6 +82,7 @@ return (
 // </TouchableOpacity>
 // </View> 
 );
+}
 }
 const styles = StyleSheet.create({
 container: {
