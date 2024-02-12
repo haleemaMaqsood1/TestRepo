@@ -8,7 +8,7 @@ import {
 	StyleSheet, 
 } from "react-native"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import TaskItem from "../component/TaskItem";
 const Home = () => { 
 	const [task, setTask] = useState(""); 
 	const [tasks, setTasks] = useState([]); 
@@ -33,21 +33,7 @@ const Home = () => {
         }
     };
 
-	// const handleAddTask = () => { 
-	// 	if (task) { 
-	// 		if (editIndex !== -1) { 
-	// 			// Edit existing task 
-	// 			const updatedTasks = [...tasks]; 
-	// 			updatedTasks[editIndex] = task; 
-	// 			setTasks(updatedTasks); 
-	// 			setEditIndex(-1); 
-	// 		} else { 
-	// 			// Add new task 
-	// 			setTasks([...tasks, task]); 
-	// 		} 
-	// 		setTask(""); 
-	// 	} 
-	// }; 
+	
     const loadTasks = async () => {
         try {
             const savedTasks = await AsyncStorage.getItem('tasks');
@@ -84,30 +70,14 @@ const Home = () => {
             console.error('Error saving tasks:', error);
         }
     };
-	// const handleDeleteTask = (index) => { 
-	// 	const updatedTasks = [...tasks]; 
-	// 	updatedTasks.splice(index, 1); 
-	// 	setTasks(updatedTasks); 
-	// }; 
-
+	
 	const renderItem = ({ item, index }) => ( 
-		<View style={styles.task}> 
-			<Text 
-				style={styles.itemList}>{item.substring(0,15)}</Text> 
-			<View 
-				style={styles.taskButtons}> 
-				<TouchableOpacity 
-					onPress={() => handleEditTask(index)}> 
-					<Text 
-						style={styles.editButton}>Edit</Text> 
-				</TouchableOpacity> 
-				<TouchableOpacity 
-					onPress={() => handleDeleteTask(index)}> 
-					<Text 
-						style={styles.deleteButton}>Delete</Text> 
-				</TouchableOpacity> 
-			</View> 
-		</View> 
+		<TaskItem
+            item={item}
+            index={index}
+            handleEditTask={handleEditTask}
+            handleDeleteTask={handleDeleteTask}
+        />
 	); 
 
 	return ( 

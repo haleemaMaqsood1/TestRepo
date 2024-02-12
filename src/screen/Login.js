@@ -19,6 +19,7 @@ Header,
 LearnMoreLinks,
 ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import CustomButton from '../component/CustomComponent';
 import { auth } from '../../FirebaseConfig';
 const Login =  () => {
     const [email,setEmail]= useState('');
@@ -39,9 +40,7 @@ const onPressLogin = async() => {
     }
 // Do something about login operation
 };
-const onPressForgotPassword = () => {
-// Do something about forgot password operation
-};
+
 const onPressSignUp =async () => {
     console.log("signup click",email);
     if(email && password){
@@ -81,20 +80,9 @@ onChangeText={value => setPassword(value)}/>
 onPress = {onPressForgotPassword}>
 <Text style={styles.forgotAndSignUpText}>Forgot Password?</Text>
 </TouchableOpacity>
-<TouchableOpacity
-onPress = {onPressLogin}
-style={styles.loginBtn}>
-<Text style={styles.loginText}>LOGIN </Text>
-</TouchableOpacity>
-<TouchableOpacity
-onPress = {onPressSignUp}
-style={styles.signUpBtn}>
-<Text style={styles.loginText}>SignUp </Text>
-</TouchableOpacity>
-{/* <TouchableOpacity
-onPress = {onPressSignUp}>
-<Text style={styles.forgotAndSignUpText}>Signup</Text>
-</TouchableOpacity> */}
+     <CustomButton onPress={onPressLogin} text="LOGIN" style={styles.loginBtn} />
+     <CustomButton onPress={onPressSignUp} text="SignUp" style={styles.signUpBtn} />
+ 
 </View>
 );
 }
