@@ -21,16 +21,19 @@ import Login from './src/screen/Login';
 import Home from './src/screen/Home';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import useAuth from './hooks/useAuth';
+import { Provider } from 'react-redux';
+import store from './redux/store';
+// import useAuth from './hooks/useAuth';
 const Stack = createNativeStackNavigator();
 
 const App =  () => {
-    const user= useAuth();
 
 
 
-if(user){
+{
     return (
+        <Provider store={store}>
+
         <NavigationContainer>
              <Stack.Navigator initialRouteName='Home'>
                 <Stack.Screen name="Home" component={Home} />
@@ -38,51 +41,10 @@ if(user){
             </Stack.Navigator>
     
         </NavigationContainer>
+        </Provider>
     );
-}else{
-return (
-    <NavigationContainer>
-         <Stack.Navigator initialRouteName='Login'>
-
-            <Stack.Screen name="Login" options={{headerShown:false}} component={Login} />
-            {/* <Stack.Screen name="Home" component={Home} /> */}
-
-        </Stack.Navigator>
-
-    </NavigationContainer>
-//  <View style={styles.container}>
-// <Text style={styles.title}> Login Screen</Text>
-// <View style={styles.inputView}>
-// <TextInput
-// style={styles.inputText}
-// placeholder="Email"
-// placeholderTextColor="#003f5c"
-// onChangeText={text => setState({email:text})}/>
-// </View>
-// <View style={styles.inputView}>
-// <TextInput
-// style={styles.inputText}
-// secureTextEntry
-// placeholder="Password"
-// placeholderTextColor="#003f5c"
-// onChangeText={text => setState({password:text})}/>
-// </View>
-// <TouchableOpacity
-// onPress = {onPressForgotPassword}>
-// <Text style={styles.forgotAndSignUpText}>Forgot Password?</Text>
-// </TouchableOpacity>
-// <TouchableOpacity
-// onPress = {onPressLogin}
-// style={styles.loginBtn}>
-// <Text style={styles.loginText}>LOGIN </Text>
-// </TouchableOpacity>
-// <TouchableOpacity
-// onPress = {onPressSignUp}>
-// <Text style={styles.forgotAndSignUpText}>Signup</Text>
-// </TouchableOpacity>
-// </View> 
-);
 }
+
 }
 const styles = StyleSheet.create({
 container: {

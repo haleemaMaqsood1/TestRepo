@@ -9,10 +9,14 @@ import {
 } from "react-native"; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import TaskItem from "../component/TaskItem";
+import { useSelector, useDispatch } from 'react-redux';
+import { addTodo, updateTask, deleteTodo,loadTodos,fetchTodos } from "../../redux/todoSlice";
 const Home = () => { 
 	const [task, setTask] = useState(""); 
 	const [tasks, setTasks] = useState([]); 
 	const [editIndex, setEditIndex] = useState(-1); 
+	const taskList = useSelector((state) => state.todos);
+    const dispatch = useDispatch();
     useEffect(() => {
         loadTasks();
     }, []);
@@ -22,12 +26,16 @@ const Home = () => {
                 const updatedTasks = [...tasks];
                 updatedTasks[editIndex] = task;
                 setTasks(updatedTasks);
-                saveTasks(updatedTasks);
+                // saveTasks(updatedTasks);
+				dispatch(addTodo(updatedTasks));
+
                 setEditIndex(-1);
             } else {
                 const updatedTasks = [...tasks, task];
                 setTasks(updatedTasks);
                 saveTasks(updatedTasks);
+				dispatch(addTodo(updatedTasks));
+
             }
             setTask("");
         }
@@ -58,17 +66,15 @@ const Home = () => {
 		const taskToEdit = tasks[index]; 
 		setTask(taskToEdit); 
 		setEditIndex(index); 
+		dispatch(updateTask(updatedTasks));
+
 	}; 
     const handleDeleteTask = async (index) => {
         const updatedTasks = [...tasks];
         updatedTasks.splice(index, 1);
         setTasks(updatedTasks);
-        try {
-            await AsyncStorage.setItem('tasks', JSON.stringify(updatedTasks));
-            console.log("handle delete with async storage ",updatedTasks)
-        } catch (error) {
-            console.error('Error saving tasks:', error);
-        }
+		dispatch(deleteTodo(updatedTasks));
+
     };
 	
 	const renderItem = ({ item, index }) => ( 

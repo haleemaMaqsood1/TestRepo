@@ -76,8 +76,7 @@ value={password}
 placeholderTextColor="#003f5c"
 onChangeText={value => setPassword(value)}/>
 </View>
-<TouchableOpacity
-onPress = {onPressForgotPassword}>
+<TouchableOpacity>
 <Text style={styles.forgotAndSignUpText}>Forgot Password?</Text>
 </TouchableOpacity>
      <CustomButton onPress={onPressLogin} text="LOGIN" style={styles.loginBtn} />
