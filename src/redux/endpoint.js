@@ -1,0 +1,1 @@
+export const GetRoutine='/v1/api/reminders/all';
