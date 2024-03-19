@@ -17,8 +17,7 @@ Header,
 LearnMoreLinks,
 ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-import Login from './src/screen/Login';
-import Home from './src/screen/Home';
+import Weather from './src/screen/Weather';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider } from 'react-redux';
@@ -35,8 +34,8 @@ const App =  () => {
         <Provider store={store}>
 
         <NavigationContainer>
-             <Stack.Navigator initialRouteName='Home'>
-                <Stack.Screen name="Home" component={Home} />
+             <Stack.Navigator initialRouteName='Weather' >
+                <Stack.Screen name="Weather" component={Weather} />
     
             </Stack.Navigator>
     
