@@ -1,180 +1,150 @@
 import React, { useState,useEffect } from "react"; 
+import {KeyboardAvoidingView, } from "react-native";
+import Header from "./component/Header";
 import { 
 	View, 
 	Text, 
 	TextInput, 
 	TouchableOpacity, 
 	FlatList, 
-	StyleSheet, 
+	StyleSheet,
+	Image,
 } from "react-native"; 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import TaskItem from "../component/TaskItem";
-import { useSelector, useDispatch } from 'react-redux';
-import { addTodo, updateTask, deleteTodo,loadTodos,fetchTodos } from "../../redux/todoSlice";
+import { RFPercentage, RFValue } from "react-native-responsive-fontsize";// import CheckBox from 'react-native-check-box';
+import CustomHeader from "./component/CustomHaeder";
+
 const Home = () => { 
-	const [task, setTask] = useState(""); 
-	const [tasks, setTasks] = useState([]); 
-	const [editIndex, setEditIndex] = useState(-1); 
-	const taskList = useSelector((state) => state.todos);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        loadTasks();
-    }, []);
-    const handleAddTask = () => {
-        if (task) {
-            if (editIndex !== -1) {
-                const updatedTasks = [...tasks];
-                updatedTasks[editIndex] = task;
-                setTasks(updatedTasks);
-                // saveTasks(updatedTasks);
-				dispatch(addTodo(updatedTasks));
 
-                setEditIndex(-1);
-            } else {
-                const updatedTasks = [...tasks, task];
-                setTasks(updatedTasks);
-                saveTasks(updatedTasks);
-				dispatch(addTodo(updatedTasks));
+	const data = [
+		{
+		  id: 1,
+		  title: "Pulse",
+		  count: 80,
+		  unit: "BPM",
+		  icon: require('../assets/pulse.png'),
+		},
+		{
+		  id: 2,
+		  title: "Activities",
+		  count: "1.2K",
+		  unit: "steps",
+		  icon: require('../assets/footsteps.png'),
+		},
+		{
+		  id: 3,
+		  title: "Water",
+		  count: "0.8",
+		  unit: "liters",
+		  icon: require('../assets/droplet.png'),
+		},
+		{
+		  id: 4,
+		  title: "Calories",
+		  count: 35,
+		  unit: "kcal",
+		  icon: require('../assets/calorie.png'),
+		},
+	  ];
+	  
+  const renderItem = ({ item }) => (
+	<View style={styles.card}>
+		<View style={styles.cardTitle}>
+			<Text style={styles.title}>{item.title}</Text>
 
-            }
-            setTask("");
-        }
-    };
+			<Image source={item.icon} style={styles.icon} />
+		</View>	
 
-	
-    const loadTasks = async () => {
-        try {
-            const savedTasks = await AsyncStorage.getItem('tasks');
-            if (savedTasks) {
-                setTasks(JSON.parse(savedTasks));
-            }
-        } catch (error) {
-            console.error('Error loading tasks:', error);
-        }
-    };
 
-    const saveTasks = async (updatedTasks) => {
-        try {
-            await AsyncStorage.setItem('tasks', JSON.stringify(updatedTasks));
-            console.log("task save at local storage",updatedTasks)
-        } catch (error) {
-            console.error('Error saving tasks:', error);
-        }
-    };
+	  <View style={styles.details}>
+		<Text style={styles.count}>{item.count}</Text>
+		<Text style={{...styles.count,fontSize:RFValue(14),paddingTop:23}}>{item.unit}</Text>
 
-	const handleEditTask = (index) => { 
-		const taskToEdit = tasks[index]; 
-		setTask(taskToEdit); 
-		setEditIndex(index); 
-		dispatch(updateTask(updatedTasks));
-
-	}; 
-    const handleDeleteTask = async (index) => {
-        const updatedTasks = [...tasks];
-        updatedTasks.splice(index, 1);
-        setTasks(updatedTasks);
-		dispatch(deleteTodo(updatedTasks));
-
-    };
-	
-	const renderItem = ({ item, index }) => ( 
-		<TaskItem
-            item={item}
-            index={index}
-            handleEditTask={handleEditTask}
-            handleDeleteTask={handleDeleteTask}
-        />
-	); 
+	  </View>
+	</View>
+  );
 
 	return ( 
-		<View style={styles.container}> 
-			<Text style={styles.heading}>Enter your Note</Text> 
-			{/* <Text style={styles.title}>ToDo App</Text>  */}
-			<TextInput 
-				style={styles.input} 
-				placeholder="Write a Note"
-				value={task} 
-				onChangeText={(text) => setTask(text)} 
-			/> 
-			<TouchableOpacity 
-				style={styles.addButton} 
-				onPress={handleAddTask}> 
-				<Text style={styles.addButtonText}> 
-					{editIndex !== -1 ? "Update Note" : "Add Note"} 
-				</Text> 
-			</TouchableOpacity> 
-			<FlatList 
-				data={tasks} 
-				renderItem={renderItem} 
-				keyExtractor={(item, index) => index.toString()} 
-			/> 
-		</View> 
+		<KeyboardAvoidingView
+		behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+		style={styles.container}
+		>
+			<Header/>
+			<CustomHeader title="Indexes" subtitle="Today"/>
+			<FlatList
+				data={data}
+				renderItem={renderItem}
+				keyExtractor={(item) => item.id.toString()}
+				numColumns={2}
+				/>
+			<CustomHeader title="Pedometer" subtitle="Today"/>
+
+		
+
+		</KeyboardAvoidingView>
 	); 
 }; 
 
 const styles = StyleSheet.create({ 
 	container: { 
-		flex: 1, 
-		padding: 40, 
-		marginTop: 40, 
+		// flex: 1, 
+		backgroundColor:'white'
+
 	}, 
-	title: { 
-		fontSize: 24, 
-		fontWeight: "bold", 
-		marginBottom: 20, 
-	}, 
-	heading: { 
-		fontSize: 30, 
-		fontWeight: "bold", 
-		marginBottom: 7, 
-		color: "green", 
-	}, 
-	input: { 
-		borderWidth: 3, 
-		borderColor: "#ccc", 
-		padding: 10, 
-		marginBottom: 10, 
-		borderRadius: 10, 
-		fontSize: 18, 
-        width:'100%',
-        height:'40%',
-	}, 
-	addButton: { 
-		backgroundColor: "green", 
-		padding: 10, 
-		borderRadius: 5, 
-		marginBottom: 10, 
-	}, 
-	addButtonText: { 
-		color: "white", 
-		fontWeight: "bold", 
-		textAlign: "center", 
-		fontSize: 18, 
-	}, 
-	task: { 
-		flexDirection: "row", 
-		justifyContent: "space-between", 
-		alignItems: "center", 
-		marginBottom: 15, 
-		fontSize: 18, 
-	}, 
-	itemList: { 
-		fontSize: 19, 
-	}, 
-	taskButtons: { 
-		flexDirection: "row", 
-	}, 
-	editButton: { 
-		marginRight: 10, 
-		color: "green", 
-		fontWeight: "bold", 
-		fontSize: 18, 
-	}, 
-	deleteButton: { 
-		color: "red", 
-		fontWeight: "bold", 
-		fontSize: 18, 
-	}, 
+	
+	card: {
+		// alignItems: 'center',
+		padding: 20,
+		marginLeft:'3.5%',
+		width: '43%',
+		margin:'3%',
+		borderRadius:10,
+		backgroundColor:'#FFFFFF', 
+
+		shadowColor: '#000',
+		shadowOffset: {
+		  width: 0,
+		  height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
+		// backgroundColor:'grey', // Adjusted width to show two cards in a row
+
+	  },
+	  cardTitle:{
+       flexDirection:'row',
+	   width:'100%',
+	//    padding:'5%',
+	   justifyContent:'space-between',
+	   color:'#121212'
+	
+	  },
+	  icon: {
+		width: 27,
+		height: 27,
+		// marginRight: 5,
+	  },
+	  details: {
+		flexDirection:'row',
+		textAlign:'left',
+		color:'black'
+
+	  },
+	  title: {
+		fontSize: RFValue(14),
+		color:'#121212'
+
+	  },
+	  count: {
+		fontSize: RFValue(32),
+		fontWeight: 'bold',
+
+	  },
+	  separator: {
+		height: 1,
+		backgroundColor: '#ccc',
+	  },
+	
 }); 
 
 export default Home;
