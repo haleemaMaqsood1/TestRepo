@@ -41,7 +41,7 @@ const JobDetailScreen = ({ navigation }) => {
                             />
                             <View style={styles.jobHeaderInner}>
                                 <Text style={styles.fieldName}>{jobTitle}</Text>
-                                <Text style={{fontWeight:'500'}}>Kickstarter<Text style={styles.postedText}>,in Manchester</Text></Text>
+                                <Text style={{ fontWeight: '500' }}>Kickstarter<Text style={styles.postedText}>,in Manchester</Text></Text>
                                 <View style={styles.formHederRiht}>
                                     <Text style={styles.tag}>React</Text>
                                     <Text style={styles.tag}>Mongo Db</Text>
@@ -90,16 +90,19 @@ const styles = StyleSheet.create({
     scrollView: {
         flexGrow: 1,
     },
-    jobHeader:{ 
-        marginTop: '3%', 
+    jobHeader: {
+        marginTop: '3%',
         flexDirection: 'row'
-     },
-     jobHeaderInner:{ 
-        justifyContent: 'space-between', 
-        width: '70%', 
-        marginLeft: '3%' 
     },
-    formHederRiht:{ flexDirection: 'row', marginTop: '3%' },
+    jobHeaderInner: {
+        justifyContent: 'space-between',
+        width: '70%',
+        marginLeft: '3%'
+    },
+    formHederRiht: {
+        flexDirection: 'row',
+        marginTop: '3%'
+    },
     innerContainer: {
         width: '90%',
         alignSelf: 'center'
@@ -141,7 +144,7 @@ const styles = StyleSheet.create({
         paddingBottom: '5%'
     },
     formInner: {
-        borderWidth: 0.5,
+        borderWidth: 0.2,
         borderRadius: 10,
         marginBottom: '3%',
         paddingLeft: '3%',
