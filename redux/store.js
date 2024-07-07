@@ -1,11 +1,8 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
+import jobReducer from './jobSlice';
 
-import todoReducer from './todoSlice';
-
-const store = configureStore({
- reducer: {
- todos: todoReducer,
- },
+export const store = configureStore({
+  reducer: {
+    job: jobReducer,
+  },
 });
-
-export default store;
