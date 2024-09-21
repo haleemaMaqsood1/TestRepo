@@ -32,6 +32,12 @@ const Login = () => {
 
         }
       };
+      const handleSignUpPress = () => {
+       console.log("SignUp click")
+          navigation.navigate('SignUp');
+
+        }
+      
     useEffect(() => {
         // Validate email and password fields
         if (email === '' || password === '') {
@@ -88,8 +94,10 @@ const Login = () => {
 			</View>
 			<View style={styles.signupStyle}>
 				<Text style={styles.dontText}>Don't have an account?</Text>
+                <TouchableOpacity
+                onPress={handleSignUpPress}>
 				<Text style={styles.SignUpText}>Sign Up</Text>
-
+                </TouchableOpacity>
 			</View>
 
 			<View style={styles.otherAccountStyle}>

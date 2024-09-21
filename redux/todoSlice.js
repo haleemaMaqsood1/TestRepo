@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const todoSlice = createSlice({
   name: "todos",
@@ -30,32 +29,7 @@ const todoSlice = createSlice({
   },
 });
 export const { addTodo, updateTask, deleteTodo,loadTodos } = todoSlice.actions;
-export const saveTasks = async (tasks) => {
-  try {
-    await AsyncStorage.setItem('tasks', JSON.stringify(tasks));
-  } catch (error) {
-    console.error('Error saving tasks:', error);
-  }
-};
 
-export const loadTasks = () => async (dispatch) => {
-  try {
-    const savedTasks = await AsyncStorage.getItem('tasks');
-    if (savedTasks) {
-      dispatch(loadTodos(JSON.parse(savedTasks)));
-    }
-  } catch (error) {
-    console.error('Error loading tasks:', error);
-  }
-};
-export const fetchTodos = () => async (dispatch) => {
-  try {
-    const savedTodos = await AsyncStorage.getItem('todos');
-    if (savedTodos) {
-      dispatch(loadTodos(JSON.parse(savedTodos))); // Dispatch loadTodos action with loaded todos
-    }
-  } catch (error) {
-    console.error('Error loading todos:', error);
-  }
-};
+
+
 export default todoSlice.reducer;
